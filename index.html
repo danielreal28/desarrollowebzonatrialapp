@@ -243,7 +243,7 @@
   }
 
   /* ---------- PROYECTOS ---------- */
-  .projects{ display:grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .projects{ display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 360px)); gap: 20px; justify-content: center; }
   .proj{
     border: 1px solid var(--border); border-radius: var(--radius);
     overflow:hidden; background: var(--surface);
@@ -535,21 +535,8 @@
     <div class="wrap">
       <p class="sec-tag"><span class="slashes">//</span> proyectos</p>
       <h2 class="sec-title">Algunos trabajos recientes</h2>
-      <p class="sec-sub">Tres juegos propios en camino a Google Play. El botón de cada uno ya está listo: en cuanto publiques la ficha, solo hay que pegar el ID real del paquete.</p>
+      <p class="sec-sub">Juegos propios en camino a Google Play.</p>
       <div class="projects">
-        <div class="proj">
-          <div class="proj-thumb">Jackpot Blast</div>
-          <div class="proj-body">
-            <h4>Jackpot Blast</h4>
-            <p>Juego de casino tipo tragamonedas con rondas rápidas y bonus especiales.</p>
-            <div class="proj-meta">
-              <span class="status dev">pendiente de publicación</span>
-              <span class="msg-time">Unity</span>
-            </div>
-            <!-- Cuando publiques el juego, reemplazá com.zonatrialapp.jackpotblast por el ID real del paquete en Play Console -->
-            <a class="btn btn-ghost store-btn" href="https://play.google.com/store/apps/details?id=com.zonatrialapp.jackpotblast" target="_blank" rel="noopener">Ver en Play Store</a>
-          </div>
-        </div>
         <div class="proj">
           <div class="proj-thumb">Nova Strike</div>
           <div class="proj-body">
@@ -577,7 +564,7 @@
           </div>
         </div>
       </div>
-      <p class="note">Los tres botones ya apuntan a Play Store con un ID de paquete de ejemplo (com.zonatrialapp.nombredeljuego). En cuanto cada juego esté publicado, abrí el archivo, buscá esa línea comentada y reemplazá el ID por el real de tu ficha en Play Console — no hace falta tocar nada más.</p>
+      <!-- NOTA PARA VOS (no se muestra en la web): los botones apuntan a Play Store con un ID de paquete de ejemplo (com.zonatrialapp.nombredeljuego). Cuando cada juego esté publicado, buscá la línea comentada arriba de cada botón y reemplazá el ID por el real de tu ficha en Play Console. -->
     </div>
   </section>
 
@@ -776,9 +763,10 @@
           <li class="muted-line">Remoto — Latinoamérica</li>
         </ul>
         <h5 style="margin-top:22px;">Novedades</h5>
+        <!-- NOTA PARA VOS (no se muestra en la web): conectá este formulario a Mailchimp, Brevo o un servicio similar para guardar suscriptores. Mientras tanto el botón queda deshabilitado para no mostrar un error al visitante. -->
         <div class="foot-newsletter">
-          <input type="email" placeholder="tu@email.com" aria-label="Email para novedades">
-          <button type="button" onclick="alert('Conectá este botón a Mailchimp, Brevo o un servicio similar para guardar suscriptores.')">Sumarme</button>
+          <input type="email" placeholder="tu@email.com" aria-label="Email para novedades" disabled>
+          <button type="button" disabled title="Próximamente">Sumarme</button>
         </div>
       </div>
     </div>
@@ -787,7 +775,7 @@
       <span>© 2026 ZonaTrialApp. Todos los derechos reservados.</span>
       <div class="foot-legal">
         <a href="#">Términos y condiciones</a>
-        <a href="#">Política de privacidad</a>
+        <a href="privacidad.html">Política de privacidad</a>
         <a href="#">Cookies</a>
       </div>
     </div>
