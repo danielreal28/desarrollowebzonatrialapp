@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZonaTrialApp — Apps, Web y Juegos</title>
+<meta name="description" content="Desarrollo de aplicaciones móviles, sitios web y videojuegos. Guía para publicar en Play Store y foro de la comunidad.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #090c11;
+    --bg-alt: #0d121a;
+    --surface: #111826;
+    --surface-2: #151d2c;
+    --border: #223047;
+    --text: #e7edf5;
+    --muted: #8a97ab;
+    --cyan: #35e0c4;
+    --violet: #8b7bff;
+    --amber: #f2b84b;
+    --danger: #ff6b6b;
+    --mono: 'IBM Plex Mono', monospace;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+    --radius: 6px;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(circle at 15% 0%, rgba(139,123,255,0.10), transparent 40%),
+      radial-gradient(circle at 85% 20%, rgba(53,224,196,0.08), transparent 40%);
+    color: var(--text);
+    font-family: var(--body);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection{ background: var(--cyan); color: #04110d; }
+  a{ color: inherit; }
+  img{ max-width: 100%; display:block; }
+
+  .wrap{ max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+  /* focus visibility */
+  a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible{
+    outline: 2px solid var(--cyan);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+
+  /* ---------- NAV ---------- */
+  header{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(9,12,17,0.82);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content: space-between;
+    height: 64px;
+  }
+  .logo{
+    font-family: var(--mono);
+    font-size: 15px;
+    color: var(--text);
+    display:flex; align-items:center; gap:8px;
+    text-decoration:none;
+  }
+  .logo .caret{ color: var(--cyan); }
+  .navlinks{ display:flex; gap: 28px; list-style:none; margin:0; padding:0; }
+  .navlinks a{
+    font-family: var(--mono); font-size: 13px; text-decoration:none;
+    color: var(--muted); transition: color .15s ease;
+  }
+  .navlinks a:hover{ color: var(--text); }
+  .nav-cta{
+    font-family: var(--mono); font-size: 13px;
+    padding: 8px 14px; border: 1px solid var(--cyan);
+    border-radius: var(--radius); color: var(--cyan); text-decoration:none;
+    transition: background .15s ease, color .15s ease;
+  }
+  .nav-cta:hover{ background: var(--cyan); color: #04110d; }
+
+  .navToggle{
+    display:none; background:none; border: 1px solid var(--border); border-radius: 6px;
+    width: 40px; height: 40px; padding: 0; cursor:pointer;
+    align-items:center; justify-content:center; flex-direction:column; gap:5px;
+  }
+  .navToggle span{
+    display:block; width: 18px; height: 2px; background: var(--text);
+    transition: transform .2s ease, opacity .2s ease;
+  }
+  .navToggle.open span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+  .navToggle.open span:nth-child(2){ opacity: 0; }
+  .navToggle.open span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+
+  .mobilePanel{
+    display:none; flex-direction:column; gap: 4px;
+    background: var(--bg-alt); border-bottom: 1px solid var(--border);
+    padding: 10px 0 18px;
+  }
+  .mobilePanel.open{ display:flex; }
+  .mobilePanel a{
+    font-family: var(--mono); font-size: 14px; text-decoration:none; color: var(--muted);
+    padding: 12px 4px; border-bottom: 1px solid var(--border);
+  }
+  .mobilePanel a:hover{ color: var(--text); }
+  .mobilePanel .mobile-cta{
+    text-align:center; margin-top: 12px; border-bottom:none; color:#04110d;
+  }
+
+  @media (max-width: 1000px){
+    .navlinks{ display:none; }
+    .nav-cta{ display:none; }
+    .navToggle{ display:flex; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{ padding: 88px 0 80px; }
+  .hero-grid{
+    display:grid; grid-template-columns: 1.1fr 1fr; gap: 56px; align-items:center;
+  }
+  .kicker{
+    font-family: var(--mono); font-size: 13px; color: var(--cyan);
+    margin: 0 0 18px;
+  }
+  h1.headline{
+    font-family: var(--display); font-weight: 700;
+    font-size: clamp(2.1rem, 4vw, 3.4rem);
+    line-height: 1.08; letter-spacing: -0.01em;
+    margin: 0 0 22px;
+  }
+  h1.headline .grad{
+    background: linear-gradient(100deg, var(--cyan), var(--violet));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .lead{ font-size: 1.05rem; color: var(--muted); max-width: 46ch; margin: 0 0 30px; text-align: justify; text-justify: inter-word; }
+  .btn-row{ display:flex; gap: 14px; flex-wrap: wrap; }
+  .btn{
+    font-family: var(--mono); font-size: 14px; padding: 12px 20px;
+    border-radius: var(--radius); text-decoration:none; display:inline-block;
+    border: 1px solid transparent; transition: transform .12s ease, background .15s ease, border-color .15s ease;
+  }
+  .btn-primary{ background: var(--cyan); color: #04110d; font-weight: 600; }
+  .btn-primary:hover{ transform: translateY(-1px); }
+  .btn-ghost{ border-color: var(--border); color: var(--text); }
+  .btn-ghost:hover{ border-color: var(--muted); }
+
+  /* terminal window */
+  .terminal{
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+  }
+  .term-bar{
+    display:flex; align-items:center; gap:8px;
+    padding: 10px 14px; background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+  }
+  .dot{ width:10px; height:10px; border-radius:50%; }
+  .dot.r{ background:#ff5f57; } .dot.y{ background:#febc2e; } .dot.g{ background:#28c840; }
+  .term-title{ font-family: var(--mono); font-size: 12px; color: var(--muted); margin-left: 8px; }
+  .term-body{
+    font-family: var(--mono); font-size: 13.5px; padding: 22px; min-height: 230px;
+    color: #c8d3e0;
+  }
+  .term-body .prompt{ color: var(--cyan); }
+  .term-body .line{ white-space: pre-wrap; margin: 0 0 6px; }
+  .cursor{ display:inline-block; width:8px; height:16px; background: var(--cyan); vertical-align: -3px; animation: blink 1s steps(1) infinite; }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  /* ---------- BARRA DE PLATAFORMAS ---------- */
+  .platform-bar{
+    padding: 40px 0 52px;
+    border-top: 1px solid var(--border);
+    background: linear-gradient(90deg,
+      rgba(53,224,196,0.07) 0%,
+      rgba(139,123,255,0.07) 50%,
+      rgba(53,224,196,0.07) 100%);
+  }
+  .platform-caption{
+    text-align:center; font-family: var(--mono); font-size: 12.5px;
+    color: var(--muted); margin: 0 0 30px;
+  }
+  .platform-row{
+    display:flex; align-items:center; justify-content:center;
+    gap: 54px; flex-wrap: wrap;
+  }
+  .platform-item{
+    display:flex; align-items:center; gap:11px;
+    color: var(--muted); opacity: 0.7;
+    transition: opacity .15s ease, color .15s ease;
+  }
+  .platform-item:hover{ opacity: 1; color: var(--text); }
+  .platform-item svg{ width: 28px; height: 28px; flex-shrink:0; }
+  .platform-item span{ font-family: var(--display); font-size: 1.1rem; font-weight: 500; white-space: nowrap; }
+  @media (max-width: 640px){
+    .platform-row{ gap: 28px 36px; }
+    .platform-item svg{ width: 24px; height: 24px; }
+    .platform-item span{ font-size: 1rem; }
+  }
+
+  /* ---------- SECTION HEADER (comment style) ---------- */
+  .sec{ padding: 78px 0; border-top: 1px solid var(--border); }
+  .sec-tag{
+    font-family: var(--mono); font-size: 13px; color: var(--muted); margin: 0 0 10px;
+  }
+  .sec-tag .slashes{ color: var(--violet); }
+  h2.sec-title{
+    font-family: var(--display); font-weight: 600;
+    font-size: clamp(1.6rem, 2.6vw, 2.2rem); margin: 0 0 14px;
+  }
+  .sec-sub{ color: var(--muted); max-width: 62ch; margin: 0 0 44px; text-align: justify; text-justify: inter-word; }
+
+  /* ---------- SERVICIOS ---------- */
+  .cards3{ display:grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+  .card{
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 26px;
+  }
+  .card .ic{
+    width: 38px; height: 38px; border-radius: 8px;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--mono); font-size: 15px; font-weight:600;
+    margin-bottom: 18px;
+  }
+  .ic.apps{ background: rgba(53,224,196,0.14); color: var(--cyan); }
+  .ic.web{ background: rgba(139,123,255,0.16); color: var(--violet); }
+  .ic.games{ background: rgba(242,184,75,0.15); color: var(--amber); }
+  .card h3{ font-family: var(--display); font-size: 1.15rem; margin: 0 0 10px; }
+  .card p{ color: var(--muted); font-size: 0.95rem; margin: 0 0 16px; }
+  .taglist{ display:flex; flex-wrap:wrap; gap:8px; list-style:none; padding:0; margin:0; }
+  .taglist li{
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted);
+    border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px;
+  }
+
+  /* ---------- PROYECTOS ---------- */
+  .projects{ display:grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .proj{
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow:hidden; background: var(--surface);
+    transition: border-color .15s ease;
+  }
+  .proj:hover{ border-color: var(--cyan); }
+  .proj-thumb{
+    height: 128px; display:flex; align-items:center; justify-content:center;
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    border-bottom: 1px solid var(--border);
+    background:
+      repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 10px);
+  }
+  .proj-body{ padding: 18px; }
+  .proj-body h4{ font-family: var(--display); font-size: 1rem; margin: 0 0 6px; }
+  .proj-body p{ color: var(--muted); font-size: 0.88rem; margin: 0 0 12px; }
+  .proj-meta{ display:flex; justify-content: space-between; align-items:center; }
+  .store-btn{
+    display:block; text-align:center; margin-top: 14px;
+    font-size: 12.5px; padding: 9px 14px;
+  }
+  .status{ font-family: var(--mono); font-size: 11px; padding: 3px 8px; border-radius: 4px; }
+  .status.live{ background: rgba(53,224,196,0.14); color: var(--cyan); }
+  .status.beta{ background: rgba(242,184,75,0.15); color: var(--amber); }
+  .status.dev{ background: rgba(139,123,255,0.16); color: var(--violet); }
+
+  /* ---------- PLAY STORE GUIDE ---------- */
+  .steps{ display:flex; flex-direction: column; border: 1px solid var(--border); border-radius: var(--radius); overflow:hidden; }
+  .step{
+    display:grid; grid-template-columns: 56px 1fr; gap: 18px;
+    padding: 22px 24px; background: var(--surface);
+  }
+  .step + .step{ border-top: 1px solid var(--border); }
+  .step-n{
+    font-family: var(--mono); font-size: 13px; color: var(--bg);
+    background: var(--cyan); width: 32px; height:32px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-weight:600;
+  }
+  .step h4{ font-family: var(--display); font-size: 1.02rem; margin: 0 0 6px; }
+  .step p{ color: var(--muted); font-size: 0.92rem; margin:0; }
+  .note{
+    margin-top: 26px; font-family: var(--mono); font-size: 12.5px; color: var(--muted);
+    border-left: 2px solid var(--violet); padding: 10px 16px; background: rgba(139,123,255,0.06);
+  }
+
+  /* ---------- FORO ---------- */
+  .forum-layout{ display:grid; grid-template-columns: 1fr 300px; gap: 28px; align-items:start; }
+  .forum-box{ border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); }
+  .forum-header{
+    display:flex; align-items:center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+  }
+  .forum-header span{ font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  #msgList{ list-style:none; margin:0; padding: 6px 0; max-height: 430px; overflow-y:auto; }
+  #msgList li{ padding: 14px 20px; border-bottom: 1px solid var(--border); }
+  #msgList li:last-child{ border-bottom:none; }
+  .msg-top{ display:flex; align-items:center; gap:10px; margin-bottom: 6px; }
+  .avatar{
+    width: 26px; height: 26px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--mono); font-size: 11px; font-weight:600; color:#04110d;
+  }
+  .msg-user{ font-size: 0.88rem; font-weight:600; }
+  .msg-tag{
+    font-family: var(--mono); font-size: 10.5px; padding: 2px 7px; border-radius:4px;
+    border: 1px solid var(--border); color: var(--muted);
+  }
+  .msg-time{ font-family: var(--mono); font-size: 10.5px; color: var(--muted); margin-left:auto; }
+  .msg-text{ font-size: 0.92rem; color: #d3dbe6; margin: 0; }
+  .composer{ padding: 16px 20px; border-top: 1px solid var(--border); }
+  .composer-row{ display:flex; gap:10px; margin-bottom: 10px; }
+  .composer input[type=text], .composer select, .composer textarea{
+    background: var(--bg-alt); border: 1px solid var(--border); color: var(--text);
+    border-radius: 4px; padding: 9px 11px; font-family: var(--body); font-size: 0.88rem;
+  }
+  .composer input[type=text]{ flex:1; }
+  .composer textarea{ width:100%; resize: vertical; min-height: 64px; margin-bottom:10px; }
+  .composer-send{
+    font-family: var(--mono); font-size: 13px; background: var(--violet); color: #100b26;
+    border:none; padding: 10px 18px; border-radius: 4px; cursor:pointer; font-weight:600;
+  }
+  .composer-send:hover{ filter: brightness(1.08); }
+  .forum-side .card{ margin-bottom: 16px; }
+  .forum-side h4{ font-family: var(--display); font-size: 0.98rem; margin: 0 0 10px; }
+  .catlist{ list-style:none; margin:0; padding:0; font-family: var(--mono); font-size: 12.5px; }
+  .catlist li{ display:flex; justify-content: space-between; padding: 7px 0; color: var(--muted); border-bottom: 1px dashed var(--border); }
+  .catlist li:last-child{ border-bottom:none; }
+
+  /* ---------- CONTACTO ---------- */
+  .contact-grid{ display:grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+  .contact-list{ list-style:none; margin:0; padding:0; }
+  .contact-list li{ display:flex; gap:14px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .contact-list .k{ font-family: var(--mono); font-size: 12px; color: var(--muted); width: 90px; flex-shrink:0; padding-top:2px; }
+  .contact-form input, .contact-form textarea{
+    width:100%; background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    border-radius: 4px; padding: 12px; font-family: var(--body); font-size: 0.92rem; margin-bottom: 14px;
+  }
+  .contact-form textarea{ min-height: 110px; resize: vertical; }
+  .form-status{
+    font-family: var(--mono); font-size: 12.5px; margin: 12px 0 0;
+    min-height: 16px; color: var(--muted);
+  }
+  .form-status.ok{ color: var(--cyan); }
+  .form-status.error{ color: var(--danger); }
+
+  footer{ border-top: 1px solid var(--border); padding: 64px 0 0; background: var(--bg-alt); }
+  .foot-grid{
+    display:grid; grid-template-columns: 1.4fr 1fr 1fr 1.2fr; gap: 40px;
+    padding-bottom: 44px; border-bottom: 1px solid var(--border);
+  }
+  .foot-brand .logo{ margin-bottom: 14px; }
+  .foot-brand p{ color: var(--muted); font-size: 0.88rem; max-width: 32ch; margin: 0 0 18px; }
+  .foot-social{ display:flex; gap:10px; }
+  .foot-social a{
+    width: 34px; height: 34px; border: 1px solid var(--border); border-radius: 50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    text-decoration:none; transition: border-color .15s ease, color .15s ease;
+  }
+  .foot-social a:hover{ border-color: var(--cyan); color: var(--cyan); }
+  .foot-col h5{
+    font-family: var(--mono); font-size: 12px; color: var(--muted);
+    text-transform: none; margin: 0 0 16px; letter-spacing: 0;
+  }
+  .foot-col ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:11px; }
+  .foot-col a{ font-size: 0.9rem; text-decoration:none; color: var(--text); }
+  .foot-col a:hover{ color: var(--cyan); }
+  .foot-col .muted-line{ font-size: 0.88rem; color: var(--muted); }
+  .foot-newsletter{ display:flex; gap:8px; margin-top: 4px; }
+  .foot-newsletter input{
+    flex:1; background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    border-radius: 4px; padding: 9px 11px; font-size: 0.85rem; font-family: var(--body);
+  }
+  .foot-newsletter button{
+    font-family: var(--mono); font-size: 12px; background: var(--cyan); color: #04110d;
+    border:none; border-radius:4px; padding: 0 14px; font-weight:600; cursor:pointer;
+  }
+  .foot-bottom{
+    padding: 20px 0 28px;
+    display:flex; justify-content: space-between; align-items:center; flex-wrap:wrap; gap:12px;
+  }
+  .foot-bottom span, .foot-bottom a{ font-family: var(--mono); font-size: 12px; color: var(--muted); text-decoration:none; }
+  .foot-bottom a:hover{ color: var(--text); }
+  .foot-legal{ display:flex; gap: 22px; flex-wrap:wrap; }
+  @media (max-width: 880px){
+    .foot-grid{ grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px){
+    .foot-grid{ grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 880px){
+    .hero-grid{ grid-template-columns: 1fr; }
+    .cards3{ grid-template-columns: 1fr; }
+    .projects{ grid-template-columns: 1fr 1fr; }
+    .forum-layout{ grid-template-columns: 1fr; }
+    .contact-grid{ grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px){
+    .projects{ grid-template-columns: 1fr; }
+    .step{ grid-template-columns: 40px 1fr; }
+    .hero{ padding: 56px 0 48px; }
+    .term-body{ font-size: 12px; padding: 16px; }
+    .wrap{ padding: 0 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a href="#top" class="logo"><span class="caret">&gt;</span> ZonaTrial<span style="color:var(--muted)">App</span></a>
+    <ul class="navlinks">
+      <li><a href="#servicios">servicios</a></li>
+      <li><a href="#proyectos">proyectos</a></li>
+      <li><a href="#playstore">play-store</a></li>
+      <li><a href="#nosotros">nosotros</a></li>
+      <li><a href="#foro">foro</a></li>
+      <li><a href="#contacto">contacto</a></li>
+    </ul>
+    <a href="#contacto" class="nav-cta">Iniciar proyecto</a>
+    <button class="navToggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+  <div class="mobilePanel" id="mobilePanel">
+    <div class="wrap" style="display:flex; flex-direction:column;">
+      <a href="#servicios">servicios</a>
+      <a href="#proyectos">proyectos</a>
+      <a href="#playstore">play-store</a>
+      <a href="#nosotros">nosotros</a>
+      <a href="#foro">foro</a>
+      <a href="#contacto">contacto</a>
+      <a href="#contacto" class="btn btn-primary mobile-cta">Iniciar proyecto</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="kicker">estudio independiente de desarrollo</p>
+        <h1 class="headline">ZonaTrialApp construye <span class="grad">apps, sitios y juegos</span> que corren bien desde el primer commit.</h1>
+        <p class="lead">Desarrollo de software a medida: aplicaciones móviles para Android e iOS, sitios y plataformas web, y videojuegos indie. Incluye acompañamiento para publicar tu app en Google Play.</p>
+        <div class="btn-row">
+          <a href="#contacto" class="btn btn-primary">Hablemos de tu proyecto</a>
+          <a href="#proyectos" class="btn btn-ghost">Ver proyectos</a>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="term-bar">
+          <span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+          <span class="term-title">~/zonatrialapp — zsh</span>
+        </div>
+        <div class="term-body" id="termBody"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BARRA DE PLATAFORMAS -->
+  <section class="platform-bar">
+    <div class="wrap">
+      <p class="platform-caption">Desarrollamos y publicamos en las plataformas líderes de apps y videojuegos</p>
+      <div class="platform-row">
+        <div class="platform-item">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 3L20 12L4 21V3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+          <span>Google Play</span>
+        </div>
+        <div class="platform-item">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="6" y="2" width="12" height="20" rx="2.5" stroke="currentColor" stroke-width="1.6"/><line x1="9" y1="18.5" x2="15" y2="18.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <span>App Store</span>
+        </div>
+        <div class="platform-item">
+          <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="7" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/><circle cx="8" cy="13" r="1.4" fill="currentColor"/><path d="M13 11h5M13 15h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <span>Android</span>
+        </div>
+        <div class="platform-item">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 4h7L7 20H4l4-8-4-8Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M13 4h7l-4 8 4 8h-7l-4-8 4-8Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          <span>Unity</span>
+        </div>
+        <div class="platform-item">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M3 4h18v4H3zM3 10h12v4H3zM3 16h18v4H3z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          <span>Web / PWA</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section class="sec" id="servicios">
+    <div class="wrap">
+      <p class="sec-tag"><span class="slashes">//</span> servicios</p>
+      <h2 class="sec-title">Tres formas de convertir una idea en producto</h2>
+      <p class="sec-sub">Cada proyecto arranca con una conversación corta para entender el objetivo real antes de tocar una línea de código.</p>
+      <div class="cards3">
+        <div class="card">
+          <div class="ic apps">▤</div>
+          <h3>Apps móviles</h3>
+          <p>Apps nativas e híbridas para Android e iOS, desde el prototipo hasta la publicación en las tiendas oficiales.</p>
+          <ul class="taglist">
+            <li>Kotlin</li><li>Flutter</li><li>React Native</li><li>Firebase</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ic web">◧</div>
+          <h3>Desarrollo web</h3>
+          <p>Sitios, landing pages y plataformas web con foco en performance, SEO y una interfaz que no se rompe en ningún dispositivo.</p>
+          <ul class="taglist">
+            <li>React</li><li>Next.js</li><li>Node.js</li><li>PostgreSQL</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="ic games">◆</div>
+          <h3>Videojuegos</h3>
+          <p>Prototipos y juegos 2D/3D para PC y móvil, desde la mecánica principal hasta el build final listo para publicar.</p>
+          <ul class="taglist">
+            <li>Unity</li><li>Godot</li><li>C#</li><li>Pixel art</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROYECTOS -->
+  <section class="sec" id="proyectos">
+    <div class="wrap">
+      <p class="sec-tag"><span class="slashes">//</span> proyectos</p>
+      <h2 class="sec-title">Algunos trabajos recientes</h2>
+      <p class="sec-sub">Tres juegos propios en camino a Google Play. El botón de cada uno ya está listo: en cuanto publiques la ficha, solo hay que pegar el ID real del paquete.</p>
+      <div class="projects">
+        <div class="proj">
+          <div class="proj-thumb">Jackpot Blast</div>
+          <div class="proj-body">
+            <h4>Jackpot Blast</h4>
+            <p>Juego de casino tipo tragamonedas con rondas rápidas y bonus especiales.</p>
+            <div class="proj-meta">
+              <span class="status dev">pendiente de publicación</span>
+              <span class="msg-time">Unity</span>
+            </div>
+            <!-- Cuando publiques el juego, reemplazá com.zonatrialapp.jackpotblast por el ID real del paquete en Play Console -->
+            <a class="btn btn-ghost store-btn" href="https://play.google.com/store/apps/details?id=com.zonatrialapp.jackpotblast" target="_blank" rel="noopener">Ver en Play Store</a>
+          </div>
+        </div>
+        <div class="proj">
+          <div class="proj-thumb">Nova Strike</div>
+          <div class="proj-body">
+            <h4>Nova Strike</h4>
+            <p>Shooter arcade espacial con oleadas de enemigos y power-ups por nivel.</p>
+            <div class="proj-meta">
+              <span class="status dev">pendiente de publicación</span>
+              <span class="msg-time">Unity</span>
+            </div>
+            <!-- Cuando publiques el juego, reemplazá com.zonatrialapp.novastrike por el ID real del paquete en Play Console -->
+            <a class="btn btn-ghost store-btn" href="https://play.google.com/store/apps/details?id=com.zonatrialapp.novastrike" target="_blank" rel="noopener">Ver en Play Store</a>
+          </div>
+        </div>
+        <div class="proj">
+          <div class="proj-thumb">Rocket Rush</div>
+          <div class="proj-body">
+            <h4>Rocket Rush</h4>
+            <p>Juego de habilidad y reflejos: esquivá obstáculos y llegá lo más lejos posible.</p>
+            <div class="proj-meta">
+              <span class="status dev">pendiente de publicación</span>
+              <span class="msg-time">Unity</span>
+            </div>
+            <!-- Cuando publiques el juego, reemplazá com.zonatrialapp.rocketrush por el ID real del paquete en Play Console -->
+            <a class="btn btn-ghost store-btn" href="https://play.google.com/store/apps/details?id=com.zonatrialapp.rocketrush" target="_blank" rel="noopener">Ver en Play Store</a>
+          </div>
+        </div>
+      </div>
+      <p class="note">Los tres botones ya apuntan a Play Store con un ID de paquete de ejemplo (com.zonatrialapp.nombredeljuego). En cuanto cada juego esté publicado, abrí el archivo, buscá esa línea comentada y reemplazá el ID por el real de tu ficha en Play Console — no hace falta tocar nada más.</p>
+    </div>
+  </section>
+
+  <!-- GUIA PLAY STORE -->
+  <section class="sec" id="playstore">
+    <div class="wrap">
+      <p class="sec-tag"><span class="slashes">//</span> guía</p>
+      <h2 class="sec-title">Cómo publicamos tu app en Google Play</h2>
+      <p class="sec-sub">Un resumen del proceso real, para que sepas qué esperar antes de que tu app esté disponible al público.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">1</div>
+          <div><h4>Cuenta de desarrollador</h4><p>Se crea una cuenta en Google Play Console con un pago único de registro y verificación de identidad.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-n">2</div>
+          <div><h4>Preparar el build</h4><p>La app se compila y firma como Android App Bundle (.aab), con el nivel de API mínimo y máximo definidos según el público objetivo.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-n">3</div>
+          <div><h4>Ficha de la tienda</h4><p>Título, descripción corta y larga, ícono, capturas de pantalla, categoría y política de privacidad publicada en una URL accesible.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-n">4</div>
+          <div><h4>Clasificación y precios</h4><p>Cuestionario de clasificación de contenido, definición de países disponibles y si la app es gratuita o de pago.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-n">5</div>
+          <div><h4>Pruebas internas y cerradas</h4><p>Se distribuye a un grupo reducido de testers para detectar errores antes de la publicación pública.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-n">6</div>
+          <div><h4>Revisión y publicación</h4><p>Google revisa la app contra sus políticas; el proceso puede tardar de horas a varios días según el caso.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-n">7</div>
+          <div><h4>Mantenimiento</h4><p>Monitoreo de fallos, respuesta a reseñas y actualizaciones periódicas para mantener la app activa y bien posicionada.</p></div>
+        </div>
+      </div>
+      <p class="note">Nota: los requisitos exactos y las tarifas de Google Play cambian con el tiempo — conviene revisar la Play Console antes de cada publicación.</p>
+    </div>
+  </section>
+
+  <!-- SOBRE NOSOTROS -->
+  <section class="sec" id="nosotros">
+    <div class="wrap">
+      <p class="sec-tag"><span class="slashes">//</span> nosotros</p>
+      <h2 class="sec-title">Quiénes hacemos ZonaTrialApp</h2>
+      <p class="sec-sub">Somos un equipo pequeño enfocado en construir software que funciona en producción, no solo en la demo.</p>
+
+      <div class="cards3" style="margin-bottom:44px;">
+        <div class="card">
+          <div class="ic apps">◎</div>
+          <h3>Nuestra misión</h3>
+          <p>Ayudar a emprendedores y empresas a llevar una idea desde el papel hasta una app, un sitio o un juego publicado y funcionando.</p>
+        </div>
+        <div class="card">
+          <div class="ic web">◈</div>
+          <h3>Cómo trabajamos</h3>
+          <p>Entregas cortas, comunicación directa con el cliente y código pensado para mantenerse en el tiempo, no solo para el lanzamiento.</p>
+        </div>
+        <div class="card">
+          <div class="ic games">◇</div>
+          <h3>Nuestros valores</h3>
+          <p>Transparencia en tiempos y costos, calidad técnica antes que velocidad, y soporte real después de la entrega.</p>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-n">•</div>
+          <div><h4>Origen</h4><p>ZonaTrialApp nació de la idea de ofrecer desarrollo a medida sin la burocracia de una agencia grande: un equipo chico que responde rápido y conoce cada proyecto de punta a punta.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-n">•</div>
+          <div><h4>Equipo</h4><p>Desarrolladores full-stack con experiencia en apps móviles, plataformas web y videojuegos, además de soporte en diseño y publicación en tiendas.</p></div>
+        </div>
+        <div class="step">
+          <div class="step-n">•</div>
+          <div><h4>A quién ayudamos</h4><p>Emprendedores lanzando su primer producto, negocios que necesitan digitalizarse y estudios pequeños que buscan sumar capacidad de desarrollo.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FORO -->
+  <section class="sec" id="foro">
+    <div class="wrap">
+      <p class="sec-tag"><span class="slashes">//</span> comunidad</p>
+      <h2 class="sec-title">Foro y mensajería</h2>
+      <p class="sec-sub">Espacio para dejar preguntas, propuestas de proyecto o feedback. Esta demo guarda los mensajes solo mientras la página está abierta.</p>
+      <div class="forum-layout">
+        <div class="forum-box">
+          <div class="forum-header">
+            <span id="msgCount">0 mensajes</span>
+            <span>ordenado por más reciente</span>
+          </div>
+          <ul id="msgList"></ul>
+          <div class="composer">
+            <div class="composer-row">
+              <input type="text" id="msgName" placeholder="Tu nombre" maxlength="24">
+              <select id="msgCat">
+                <option value="General">General</option>
+                <option value="Apps">Apps</option>
+                <option value="Web">Web</option>
+                <option value="Juegos">Juegos</option>
+              </select>
+            </div>
+            <textarea id="msgText" placeholder="Escribí tu mensaje..." maxlength="400"></textarea>
+            <button class="composer-send" id="sendBtn">Publicar mensaje</button>
+          </div>
+        </div>
+        <div class="forum-side">
+          <div class="card">
+            <h4>Categorías activas</h4>
+            <ul class="catlist" id="catCounts">
+              <li><span>General</span><span>0</span></li>
+              <li><span>Apps</span><span>0</span></li>
+              <li><span>Web</span><span>0</span></li>
+              <li><span>Juegos</span><span>0</span></li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Reglas rápidas</h4>
+            <p style="color:var(--muted); font-size:0.85rem; margin:0;">Sé claro con lo que necesitás, evitá spam y respetá a los demás. Los mensajes son visibles para cualquiera que abra la página.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="sec" id="contacto">
+    <div class="wrap contact-grid">
+      <div>
+        <p class="sec-tag"><span class="slashes">//</span> contacto</p>
+        <h2 class="sec-title">Contanos en qué estás pensando</h2>
+        <p class="sec-sub">Respondemos en menos de 48 horas hábiles.</p>
+        <ul class="contact-list">
+          <li><span class="k">email</span><span>zonatrialapp@gmail.com</span></li>
+          <li><span class="k">github</span><span>github.com/danielreal28</span></li>
+          <li><span class="k">ubicación</span><span>Remoto — trabajo con clientes de toda Latinoamérica</span></li>
+        </ul>
+      </div>
+      <!-- Formulario conectado a Formspree -->
+      <form class="contact-form" id="contactForm" action="https://formspree.io/f/mqpkrokq" method="POST">
+        <input type="text" name="name" placeholder="Nombre" required>
+        <input type="email" name="email" placeholder="Email" required>
+        <textarea name="message" placeholder="Contanos sobre tu proyecto" required></textarea>
+        <button type="submit" class="btn btn-primary" style="border:none; cursor:pointer;">Enviar mensaje</button>
+        <p id="formStatus" class="form-status"></p>
+      </form>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <a href="#top" class="logo"><span class="caret">&gt;</span> ZonaTrial<span style="color:var(--muted)">App</span></a>
+        <p>Desarrollamos apps, sitios web y videojuegos para negocios y emprendedores, del prototipo a la publicación.</p>
+        <div class="foot-social">
+          <a href="https://github.com/danielreal28" target="_blank" rel="noopener" aria-label="GitHub">gh</a>
+          <a href="https://instagram.com/zonatrialapp" target="_blank" rel="noopener" aria-label="Instagram">ig</a>
+          <a href="https://linkedin.com/company/zonatrialapp" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+          <a href="https://x.com/zonatrialapp" target="_blank" rel="noopener" aria-label="X / Twitter">x</a>
+        </div>
+      </div>
+
+      <div class="foot-col">
+        <h5>Compañía</h5>
+        <ul>
+          <li><a href="#nosotros">Sobre nosotros</a></li>
+          <li><a href="#proyectos">Proyectos</a></li>
+          <li><a href="#playstore">Guía Play Store</a></li>
+          <li><a href="#foro">Comunidad</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <h5>Servicios</h5>
+        <ul>
+          <li><a href="#servicios">Apps móviles</a></li>
+          <li><a href="#servicios">Desarrollo web</a></li>
+          <li><a href="#servicios">Videojuegos</a></li>
+          <li><a href="#contacto">Publicación en tiendas</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <h5>Contacto</h5>
+        <ul>
+          <li class="muted-line">zonatrialapp@gmail.com</li>
+          <li class="muted-line">Remoto — Latinoamérica</li>
+        </ul>
+        <h5 style="margin-top:22px;">Novedades</h5>
+        <div class="foot-newsletter">
+          <input type="email" placeholder="tu@email.com" aria-label="Email para novedades">
+          <button type="button" onclick="alert('Conectá este botón a Mailchimp, Brevo o un servicio similar para guardar suscriptores.')">Sumarme</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="foot-bottom">
+      <span>© 2026 ZonaTrialApp. Todos los derechos reservados.</span>
+      <div class="foot-legal">
+        <a href="#">Términos y condiciones</a>
+        <a href="#">Política de privacidad</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* ---------- Menú móvil ---------- */
+  const navToggle = document.getElementById('navToggle');
+  const mobilePanel = document.getElementById('mobilePanel');
+  function closeMenu(){
+    navToggle.classList.remove('open');
+    mobilePanel.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }
+  navToggle.addEventListener('click', () => {
+    const isOpen = mobilePanel.classList.toggle('open');
+    navToggle.classList.toggle('open', isOpen);
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+  });
+  mobilePanel.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMenu));
+
+  /* ---------- Terminal typing animation (un solo momento animado) ---------- */
+  const termBody = document.getElementById('termBody');
+  const lines = [
+    { p: '$ ', t: 'whoami' },
+    { p: '', t: 'desarrollador full-stack · apps · web · juegos' },
+    { p: '$ ', t: 'zonatrialapp build --target=android,web,unity' },
+    { p: '', t: '✔ compilando módulos...' },
+    { p: '', t: '✔ optimizando assets...' },
+    { p: '', t: '✔ listo para producción' },
+    { p: '$ ', t: '' },
+  ];
+  let li = 0, ci = 0;
+  function typeLoop(){
+    if(li >= lines.length){
+      const cursorEl = document.createElement('span');
+      cursorEl.className = 'cursor';
+      termBody.appendChild(cursorEl);
+      return;
+    }
+    const current = lines[li];
+    if(ci === 0){
+      const p = document.createElement('p');
+      p.className = 'line';
+      if(current.p) p.innerHTML = '<span class="prompt">'+current.p+'</span>';
+      termBody.appendChild(p);
+    }
+    const p = termBody.lastElementChild;
+    if(ci < current.t.length){
+      p.innerHTML = (current.p ? '<span class="prompt">'+current.p+'</span>' : '') + current.t.slice(0, ci+1);
+      ci++;
+      setTimeout(typeLoop, 18 + Math.random()*22);
+    } else {
+      li++; ci = 0;
+      setTimeout(typeLoop, 260);
+    }
+  }
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    typeLoop();
+  } else {
+    lines.forEach(l => {
+      const p = document.createElement('p');
+      p.className = 'line';
+      p.innerHTML = (l.p ? '<span class="prompt">'+l.p+'</span>' : '') + l.t;
+      termBody.appendChild(p);
+    });
+  }
+
+  /* ---------- Foro (demo en memoria) ----------
+     Estos mensajes viven solo en esta pestaña. Para que se guarden de verdad
+     entre visitantes de tu GitHub Pages, conectá un backend simple:
+       - Firebase Realtime Database / Firestore (gratis, sin servidor propio)
+       - Supabase (Postgres + API instantánea)
+     Reemplazá loadMessages()/saveMessage() por llamadas a ese servicio.
+  ------------------------------------------------ */
+  const seedMessages = [
+    { name: 'Caro', cat: 'Juegos', text: '¿Aceptan proyectos de juegos para PC además de móvil?', time: 'hace 2 h' },
+    { name: 'Martín', cat: 'Web', text: 'Necesito una landing page para lanzar un producto la próxima semana, ¿tienen disponibilidad?', time: 'hace 5 h' },
+    { name: 'Fernanda', cat: 'Apps', text: '¿Cuánto tarda en promedio publicar una app en Play Store desde cero?', time: 'ayer' },
+  ];
+  let messages = [...seedMessages];
+  const colors = ['#35e0c4', '#8b7bff', '#f2b84b', '#ff6b6b', '#5ac8fa'];
+
+  function initials(name){
+    return name.trim().slice(0,2).toUpperCase() || '??';
+  }
+  function colorFor(name){
+    let sum = 0;
+    for(const ch of name) sum += ch.charCodeAt(0);
+    return colors[sum % colors.length];
+  }
+  function render(){
+    const list = document.getElementById('msgList');
+    list.innerHTML = '';
+    [...messages].reverse().forEach(m => {
+      const li = document.createElement('li');
+      li.innerHTML = `
+        <div class="msg-top">
+          <div class="avatar" style="background:${colorFor(m.name)}">${initials(m.name)}</div>
+          <span class="msg-user">${escapeHtml(m.name)}</span>
+          <span class="msg-tag">${escapeHtml(m.cat)}</span>
+          <span class="msg-time">${escapeHtml(m.time)}</span>
+        </div>
+        <p class="msg-text">${escapeHtml(m.text)}</p>
+      `;
+      list.appendChild(li);
+    });
+    document.getElementById('msgCount').textContent = messages.length + (messages.length === 1 ? ' mensaje' : ' mensajes');
+    const counts = { General: 0, Apps: 0, Web: 0, Juegos: 0 };
+    messages.forEach(m => { if(counts[m.cat] !== undefined) counts[m.cat]++; });
+    const catEls = document.querySelectorAll('#catCounts li');
+    Object.keys(counts).forEach((cat, i) => {
+      catEls[i].querySelector('span:last-child').textContent = counts[cat];
+    });
+  }
+  function escapeHtml(str){
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+  document.getElementById('sendBtn').addEventListener('click', () => {
+    const nameEl = document.getElementById('msgName');
+    const catEl = document.getElementById('msgCat');
+    const textEl = document.getElementById('msgText');
+    const name = nameEl.value.trim() || 'Anónimo';
+    const text = textEl.value.trim();
+    if(!text) { textEl.focus(); return; }
+    messages.push({ name, cat: catEl.value, text, time: 'ahora' });
+    textEl.value = '';
+    render();
+  });
+  document.getElementById('msgText').addEventListener('keydown', (e) => {
+    if(e.key === 'Enter' && (e.metaKey || e.ctrlKey)){
+      document.getElementById('sendBtn').click();
+    }
+  });
+  render();
+
+  /* ---------- Contacto ----------
+     Conectado a Formspree (endpoint: https://formspree.io/f/mqpkrokq).
+     Los mensajes que se envíen desde el formulario llegan a zonatrialapp@gmail.com.
+  --------------------------------------- */
+  const contactForm = document.getElementById('contactForm');
+  const formStatus = document.getElementById('formStatus');
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    formStatus.className = 'form-status';
+    formStatus.textContent = 'Enviando...';
+    try{
+      const res = await fetch(contactForm.action, {
+        method: 'POST',
+        body: new FormData(contactForm),
+        headers: { 'Accept': 'application/json' }
+      });
+      if(res.ok){
+        formStatus.textContent = 'Mensaje enviado. Te respondemos a la brevedad.';
+        formStatus.classList.add('ok');
+        contactForm.reset();
+      } else {
+        throw new Error('respuesta no ok');
+      }
+    } catch(err){
+      formStatus.textContent = 'No se pudo enviar. Escribinos directo a zonatrialapp@gmail.com mientras lo resolvemos.';
+      formStatus.classList.add('error');
+    }
+  });
+</script>
+</body>
+</html>
